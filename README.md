@@ -20,4 +20,4 @@ This sandbox and its runner are still under development. If you are interested i
 
 这个项目还在开发之中(也就是说：很不稳定且测试比较不完全)。欢迎issue和评论交流
 
-一些文档：[配置文件等](https://github.com/ridethepig/JudgeGirl/题目配置文件格式规范.md)
+一些文档：[配置文件等](https://github.com/ridethepig/JudgeGirl/blob/master/%E9%A2%98%E7%9B%AE%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E8%A7%84%E8%8C%83.md)
