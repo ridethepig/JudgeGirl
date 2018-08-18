@@ -35,6 +35,7 @@ typedef struct GLOBAL_CONFIG{
     std::string judge_prob_root_path;
     std::string judge_prob_config_file;
     std::string problem_path;
+    std::string source_file_dir_path;
 } global_config_t;
 
 const std::string config_path = "./sandbox.conf";

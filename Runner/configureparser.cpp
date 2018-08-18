@@ -7,7 +7,7 @@
 void read_config_local(global_config_t & global_config) {
     std::fstream f_config;
 
-    std::string judge_temp_dir_path;
+    std::string judge_src_dir_path;
     std::string judge_prob_root_path;
     std::string judge_prob_config_file;
 
@@ -16,9 +16,11 @@ void read_config_local(global_config_t & global_config) {
         std::cerr << "No Configure File Found." << std::endl;
         exit(ERR_FILE_NOT_EXIST);
     }
-    getline(f_config, judge_temp_dir_path);
-    remove_all(judge_temp_dir_path, "\n");
-    remove_all(judge_temp_dir_path, " ");
+
+
+    getline(f_config, judge_src_dir_path);
+    remove_all(judge_src_dir_path, "\n");
+    remove_all(judge_src_dir_path, " ");
 
     getline(f_config, judge_prob_root_path);
     remove_all(judge_prob_root_path, "\n");
@@ -28,8 +30,8 @@ void read_config_local(global_config_t & global_config) {
     remove_all(judge_prob_config_file, "\n");
     remove_all(judge_prob_config_file, " ");
 
-    if (!check_dir(judge_temp_dir_path)) {
-        std::cerr << "Temp Directory not Exist." << std::endl;
+    if (!check_dir(judge_src_dir_path)) {
+        std::cerr << "Source Directory not Exist." << std::endl;
         exit(ERR_DIR_NOT_EXIST);
     }
     if (!check_dir(judge_prob_root_path)) {
@@ -39,7 +41,8 @@ void read_config_local(global_config_t & global_config) {
     f_config.close();
     global_config.judge_prob_root_path = judge_prob_root_path;
     global_config.judge_prob_config_file = judge_prob_config_file;
-    global_config.judge_sandbox_path = judge_temp_dir_path;
+    global_config.judge_sandbox_path = "./sandbox";
+    global_config.source_file_dir_path = judge_src_dir_path;
 }
 
 void read_config_problem(std::string problem_id, problem_info_t & problem_info, const global_config_t & global_config) {

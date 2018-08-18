@@ -7,7 +7,7 @@
 #include <unistd.h>
 
 void read_src_info(std::string & src_name, problem_info_t & problem_info, const global_config_t & global_config) {
-    auto root_path = global_config.judge_prob_root_path;
+    auto root_path = global_config.source_file_dir_path;
     auto src_path = src_name;
     remove_all(src_path, " ");
     src_path = path_cat(path_cat_path(root_path, global_config.problem_path), src_path);
