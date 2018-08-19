@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "syscall_listener.h": "c",
-        "*.tcc": "c",
-        "fstream": "c",
-        "common.h": "c"
-    }
-}

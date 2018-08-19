@@ -10,7 +10,8 @@ void read_src_info(std::string & src_name, problem_info_t & problem_info, const 
     auto root_path = global_config.source_file_dir_path;
     auto src_path = src_name;
     remove_all(src_path, " ");
-    src_path = path_cat(path_cat_path(root_path, global_config.problem_path), src_path);
+    //src_path = path_cat(path_cat_path(root_path, global_config.problem_path), src_path);
+    src_path = path_cat(root_path, src_path);
     std::fstream f_src;
     f_src.open(src_path);
     if (!f_src) {
@@ -65,7 +66,8 @@ int compile_and_link(const std::string& src_path, problem_info_t & problem_info,
         }
     }
     std::string output_filename = problem_info.src_path;
-    output_filename = path_cat(path_cat_path(global_config.judge_prob_root_path, global_config.problem_path),output_filename);
+    //output_filename = path_cat(path_cat_path(global_config.judge_prob_root_path, global_config.problem_path),output_filename);
+    output_filename = path_cat(global_config.source_file_dir_path, output_filename);
     problem_info.src_path = output_filename;
     complie_command += " " + src_path + " -o " + output_filename;
     complie_command += " " + default_cflags + " " + problem_info.cflags;
@@ -96,10 +98,10 @@ void clean_tmp(problem_info_t & problem_info) {
 int judge(problem_info_t & problem_info, const global_config_t & global_config, judge_result_t& judge_result) {
     std::string copy_command = "mv " + problem_info.src_path + " " + global_config.judge_sandbox_path;
     std::cout << copy_command << std::endl;
-    chdir("./sandbox");
     if (system(copy_command.c_str()) != 0) {
         std::cerr << "Error May Have Occurred" << std::endl;
     }
+    chdir("./sandbox");
     for (auto itr : problem_info.data_info) {
         std::string input_filename = problem_info.name + std::to_string(itr.idx) + ".in";
         input_filename = path_cat(path_cat_path(global_config.judge_prob_root_path, global_config.problem_path),input_filename);
