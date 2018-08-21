@@ -90,7 +90,7 @@ int compile_and_link(const std::string& src_path, problem_info_t & problem_info,
 }
 
 void clean_tmp(problem_info_t & problem_info) {
-    std::string rm_command = "rm " + problem_info.src_name + "*";
+    std::string rm_command = "rm " + problem_info.src_name + ".* " + problem_info.src_name;
     system(rm_command.c_str());
     std::cout << rm_command << std::endl;
 }
@@ -184,10 +184,12 @@ int judge(problem_info_t & problem_info, const global_config_t & global_config, 
         remove("res.in");
     }
     clean_tmp(problem_info);
+    chdir("../");
 }
 
 void gen_judge_res(JudgeResult_E result_e, const judge_result_t& judge_result, const problem_info_t& problem_info) {
     std::ofstream of_res;
+    chdir("./sandbox");
     of_res.open(problem_info.src_name + "-result.json");
     if (!of_res) {
         std::cerr << "Err : Result File Generate Failed.Cannot Create File" << std::endl;
@@ -195,7 +197,8 @@ void gen_judge_res(JudgeResult_E result_e, const judge_result_t& judge_result, c
     }
     std::string output = "{ \"ProblemNumber\": \"" + problem_info.problem_id + "\",";
     if (result_e == CompilationError) {
-        output += "\"Status\" : \"CE\"}}";
+        output += "\"Status\" : \"CE\",";
+        output += "\"Score\": 0}";
         of_res << output;
         of_res.close();
         return;
@@ -253,4 +256,5 @@ void gen_judge_res(JudgeResult_E result_e, const judge_result_t& judge_result, c
     output += "\"Score\":" + std::to_string(score) + "}";
     of_res << output;
     of_res.close();
+    chdir("../");
 }
