@@ -46,12 +46,13 @@ inline void remove_space(std::string & str) {
     remove_all(str, " ");
 }
 inline bool check_dir(std::string & Path) {
-    std::string path(Path);
+    std::string path = Path;
     size_t len = path.length();
     if(path[len-1] != '/' && path[len-1] != '\\')
         path.append("/");
     path.append("000.tmp");
-    std::ofstream outf(path);
+    std::ofstream outf;
+    outf.open(path);
     bool flag = outf;
     if(outf)
     {

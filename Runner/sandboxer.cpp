@@ -6,6 +6,8 @@
 #include "sandboxer.h"
 #include <unistd.h>
 
+std::string CE_info;
+
 void read_src_info(std::string & src_name, problem_info_t & problem_info, const global_config_t & global_config) {
     auto root_path = global_config.source_file_dir_path;
     auto src_path = src_name;
@@ -47,6 +49,7 @@ void read_src_info(std::string & src_name, problem_info_t & problem_info, const 
 
 int compile_and_link(const std::string& src_path, problem_info_t & problem_info, const global_config_t & global_config) {
     std::string complie_command;
+    CE_info = "";
     switch (problem_info.lang) {
         case cpp: {
             complie_command = "g++";
@@ -71,17 +74,19 @@ int compile_and_link(const std::string& src_path, problem_info_t & problem_info,
     problem_info.src_path = output_filename;
     complie_command += " " + src_path + " -o " + output_filename;
     complie_command += " " + default_cflags + " " + problem_info.cflags;
+    complie_command += " 2>&1";
     //system(complie_command.c_str());
     std::cout << complie_command << std::endl;
     FILE* shell_stream;
     char buffer[4096];
-    memset(buffer, '\0', sizeof(buffer));
+    //memset(buffer, '\0', sizeof(buffer));
     shell_stream = popen(complie_command.c_str(), "r");
     if (shell_stream == nullptr) {
         std::cerr << "Err: Unknown System Command Operation Error" << std::endl;
         exit(ERR_COMPILATION);
     }
-    fread(buffer, sizeof(buffer), sizeof(char), shell_stream);
+    fread(buffer, sizeof(char), sizeof(buffer), shell_stream);
+    CE_info = buffer;
     pclose(shell_stream);
     if (!check_file(output_filename)) {
         return Compilation_Error;
@@ -198,8 +203,11 @@ void gen_judge_res(JudgeResult_E result_e, const judge_result_t& judge_result, c
     std::string output = "{ \"ProblemNumber\": \"" + problem_info.problem_id + "\",";
     if (result_e == CompilationError) {
         output += "\"Status\" : \"CE\",";
-        output += "\"Score\": 0}";
+        output += "\"Score\" : 0}";
         of_res << output;
+        of_res.close();
+        of_res.open(problem_info.src_name+"_compile_error_info.txt");
+        of_res << CE_info;
         of_res.close();
         return;
     }
