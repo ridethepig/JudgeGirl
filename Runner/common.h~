@@ -53,10 +53,9 @@ inline bool check_dir(std::string & Path) {
     path.append("000.tmp");
     std::ofstream outf;
     outf.open(path);
-    bool flag = false;
+    bool flag = outf;
     if(outf)
     {
-        flag = true;
         outf.close();
         remove(path.c_str());
     }

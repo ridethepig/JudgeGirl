@@ -6,6 +6,6 @@
 
 FILE* f_log;
 
-void init_log();
-void free_log();
+inline void init_log();
+inline void free_log();
 void logger(const char * msg);

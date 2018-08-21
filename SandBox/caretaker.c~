@@ -79,7 +79,7 @@ char tmpdirTemplate[] = "./EeveeTMP.XXXXXX", *tmpdirName;
 char *res_str;
 
 char *path_cat(const char *path, char *file);
-int tv2ms(struct timeval tv);
+inline int tv2ms(struct timeval tv);
 void timeout();
 void print_usage();
 void apply_rlimit(int resource, int limit);
