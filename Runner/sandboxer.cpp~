@@ -95,7 +95,7 @@ int compile_and_link(const std::string& src_path, problem_info_t & problem_info,
 }
 
 void clean_tmp(problem_info_t & problem_info) {
-    std::string rm_command = "rm " + problem_info.src_name + " " + problem_info.name + ".out";
+    std::string rm_command = "rm " + problem_info.src_name + ".* " + problem_info.src_name;
     system(rm_command.c_str());
     std::cout << rm_command << std::endl;
 }
