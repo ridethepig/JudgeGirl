@@ -78,15 +78,20 @@ int compile_and_link(const std::string& src_path, problem_info_t & problem_info,
     //system(complie_command.c_str());
     std::cout << complie_command << std::endl;
     FILE* shell_stream;
-    char buffer[4096];
-    //memset(buffer, '\0', sizeof(buffer));
+    char buffer[MAX_BUFFER_SIZE];
+    memset(buffer, '\0', sizeof(buffer));
     shell_stream = popen(complie_command.c_str(), "r");
     if (shell_stream == nullptr) {
         std::cerr << "Err: Unknown System Command Operation Error" << std::endl;
         exit(ERR_COMPILATION);
     }
-    fread(buffer, sizeof(char), sizeof(buffer), shell_stream);
-    CE_info = buffer;
+    int output_cnt = fread(buffer, sizeof(char), sizeof(buffer), shell_stream);
+    if (output_cnt >= MAX_BUFFER_SIZE) {
+        CE_info = "Insufficient Compilation Error. Your Program is Full of Bugs.";
+    }
+    else {
+        CE_info = buffer;
+    }
     pclose(shell_stream);
     if (!check_file(output_filename)) {
         return Compilation_Error;

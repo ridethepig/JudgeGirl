@@ -11,7 +11,7 @@
 
 const int Compilation_Succeeded = 0;
 const int Compilation_Error = 1;
-
+const int MAX_BUFFER_SIZE = 8192;
 enum JudgeResult_E {
     Accepted= 1,
     WrongAnswer,
