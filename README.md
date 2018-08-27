@@ -22,6 +22,10 @@ This sandbox and its runner are still under development. If you are interested i
 
 一些文档：[配置文件等](https://github.com/ridethepig/JudgeGirl/blob/master/%E9%A2%98%E7%9B%AE%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E8%A7%84%E8%8C%83.md)
 
+# **本项目正在进行重构, 本分支已停止维护**
+
+# **This Project is Now Under Refaction. This Branch will be NO LONGER MAINTAINED.**
+
 
 
 # How to build & run
