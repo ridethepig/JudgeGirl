@@ -12,6 +12,10 @@
 #include <iostream>
 #include <vector>
 #include <cstdlib>
+#include <cstring>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/wait.h>
 
 const int ERR_FILE_NOT_EXIST = 250;
 const int ERR_DIR_NOT_EXIST = 249;
@@ -22,6 +26,7 @@ const int FEATURE_UNSUPPORTED = 245;
 const int ERR_UNKNOWN = 244;
 const int ERR_COMPILATION = 243;
 const int ERR_SANDBOX = 242;
+const int ERR_ENV = 241;
 inline std::string path_cat(std::string path, const std::string &file) {
     if (path[path.length() - 1] != '/') path += '/';
     return path + file;
@@ -53,10 +58,9 @@ inline bool check_dir(std::string & Path) {
     path.append("000.tmp");
     std::ofstream outf;
     outf.open(path);
-    bool flag = false;
+    bool flag = outf;
     if(outf)
     {
-        flag = true;
         outf.close();
         remove(path.c_str());
     }

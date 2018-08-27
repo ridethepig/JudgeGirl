@@ -8,6 +8,8 @@
 
 std::string CE_info;
 
+problem_info_t static_problem_info;
+
 void read_src_info(std::string & src_name, problem_info_t & problem_info, const global_config_t & global_config) {
     auto root_path = global_config.source_file_dir_path;
     auto src_path = src_name;
@@ -47,6 +49,17 @@ void read_src_info(std::string & src_name, problem_info_t & problem_info, const 
     src_name = src_path;
 }
 
+/*inline char* get_compile_path(const std::string & name) {
+    char gcc_path[1024];
+    memset(gcc_path, '\0', sizeof(gcc_path));
+    FILE* shell_stream = popen("which gcc", "r");
+    int cnt =fread(gcc_path, sizeof(char), sizeof(gcc_path), shell_stream);
+    if (cnt != 0) {
+        return gcc_path;
+    }
+    else exit(ERR_ENV);
+}  //this is currently useless
+*/
 int compile_and_link(const std::string& src_path, problem_info_t & problem_info, const global_config_t & global_config) {
     std::string complie_command;
     CE_info = "";
@@ -80,6 +93,10 @@ int compile_and_link(const std::string& src_path, problem_info_t & problem_info,
     FILE* shell_stream;
     char buffer[MAX_BUFFER_SIZE];
     memset(buffer, '\0', sizeof(buffer));
+    static_problem_info = problem_info;
+    void kill_compiler(int);
+    signal(SIGALRM, kill_compiler);
+    alarm(5);
     shell_stream = popen(complie_command.c_str(), "r");
     if (shell_stream == nullptr) {
         std::cerr << "Err: Unknown System Command Operation Error" << std::endl;
@@ -92,11 +109,31 @@ int compile_and_link(const std::string& src_path, problem_info_t & problem_info,
     else {
         CE_info = buffer;
     }
+    alarm(0);
     pclose(shell_stream);
     if (!check_file(output_filename)) {
         return Compilation_Error;
     }
     return Compilation_Succeeded;
+}
+
+void kill_compiler(int signum) {
+    std::ofstream of_res;
+    chdir("./sandbox");
+    of_res.open(static_problem_info.src_name + "-result.json");
+    if (!of_res) {
+        std::cerr << "Err : Result File Generate Failed.Cannot Create File" << std::endl;
+        exit(ERR_UNKNOWN);
+    }
+    std::string output = "{ \"ProblemNumber\": \"" + static_problem_info.problem_id + "\",";
+    output += "\"Status\" : \"CE\",";
+    output += "\"Score\" : 0}";
+    of_res << output;
+    of_res.close();
+    of_res.open(static_problem_info.src_name+"_compile_error_info.txt");
+    of_res << "Compile Timeout.";
+    of_res.close();
+    exit(0);
 }
 
 void clean_tmp(problem_info_t & problem_info) {
