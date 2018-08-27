@@ -7,6 +7,7 @@
 
 #include "common.h"
 #include "configureparser.h"
+#include <cstring>
 
 const int Compilation_Succeeded = 0;
 const int Compilation_Error = 1;
